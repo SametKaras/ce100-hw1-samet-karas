@@ -273,4 +273,69 @@ namespace ce100_hw1_algo_lib_cs
             }
         }
     }
+    public class RecursiveMatrixMultiplication
+    {
+        public static void multiplyMatrixRec(int[,] A, int[,] B, int[,] C, int i, int j, int k)
+        {
+            int r1 = A.GetLength(0);
+            int c1 = A.GetLength(1);
+
+            int r2 = B.GetLength(0);
+            int c2 = B.GetLength(1);
+
+            if (i >= r1)
+            {
+                return;
+            }
+
+            if (j < c2)
+            {
+                int sum = 0;
+                for (k = 0; k < c1; k++)
+                {
+                    sum += A[i, k] * B[k, j];
+                }
+                C[i, j] = sum;
+
+                multiplyMatrixRec(A, B, C, i, j + 1, 0);
+            }
+            else
+            {
+                multiplyMatrixRec(A, B, C, i + 1, 0, 0);
+            }
+        }
+
+
+
+        ///* @brief Multiply two matrices and return the result.
+        /// This function takes two matrices A and B, and multiplies them together
+        /// using a recursive algorithm. The result is returned as a new matrix C.
+        /// * @param A The first matrix to multiply.
+        /// * @param B The second matrix to multiply.
+        /// * @param r1 The number of rows in matrix A.
+        /// * @param c2 The number of columns in matrix B.
+        /// * @return The result of multiplying matrices A and B.
+        /// * @note The dimensions of the matrices A and B must be compatible for matrix
+        /// multiplication (i.e. the number of columns in A must match the number of rows
+        /// in B).
+        /// * @see multiplyMatrixRec()
+
+        public static int[,] multiplyMatrix(int[,] A, int[,] B, int r1, int c2)
+        {
+
+            int[,] C = new int[r1, c2];
+
+            for (int i = 0; i < r1; i++)
+            {
+                for (int j = 0; j < c2; j++)
+                {
+                    C[i, j] = 0;
+                }
+            }
+
+            multiplyMatrixRec(A, B, C, 0, 0, 0);
+
+            return C;
+        }
+    }
 }
