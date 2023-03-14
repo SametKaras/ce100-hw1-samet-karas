@@ -375,4 +375,124 @@ namespace ce100_hw1_algo_lib_cs
             return expectedArray;
         }
     }
+    public class StrassenMatrixMultiplication
+    {
+        public static int[,] StrassenMatrix(int[,] A, int[,] B)
+        {
+
+            // r = row
+            int r = A.GetLength(0);
+
+            /// Creates the result matrix.
+            int[,] finish = new int[r, r];
+
+            // for n = 1 situation
+            if (r == 1)
+            {
+                finish[0, 0] = A[0, 0] * B[0, 0];
+            }
+
+            else
+            {
+                /// The matrices are separated by sub-matrices.
+                int nsize = r / 2;
+
+                int[,] x111 = new int[nsize, nsize];
+                int[,] x112 = new int[nsize, nsize];
+                int[,] x121 = new int[nsize, nsize];
+                int[,] x122 = new int[nsize, nsize];
+
+                int[,] x211 = new int[nsize, nsize];
+                int[,] x212 = new int[nsize, nsize];
+                int[,] x221 = new int[nsize, nsize];
+                int[,] x222 = new int[nsize, nsize];
+
+                Divide(A, x111, 0, 0);
+                Divide(A, x112, 0, nsize);
+                Divide(A, x121, nsize, 0);
+                Divide(A, x122, nsize, nsize);
+
+                Divide(B, x211, 0, 0);
+                Divide(B, x212, 0, nsize);
+                Divide(B, x221, nsize, 0);
+                Divide(B, x222, nsize, nsize);
+
+                // Calculate c1-c7 sub-matrices
+                int[,] c1 = StrassenMatrix(Add(x111, x122), Add(x211, x222));
+                int[,] c2 = StrassenMatrix(Add(x121, x122), x211);
+                int[,] c3 = StrassenMatrix(x111, pp(x212, x222));
+                int[,] c4 = StrassenMatrix(x122, pp(x221, x211));
+                int[,] c5 = StrassenMatrix(Add(x111, x112), x222);
+                int[,] c6 = StrassenMatrix(pp(x121, x111), Add(x211, x212));
+                int[,] c7 = StrassenMatrix(pp(x112, x122), Add(x221, x222));
+                /// Multiplication of sub-matrices
+                int[,] unfinish11 = Add(pp(Add(c1, c4), c5), c7);
+                int[,] unfinish12 = Add(c3, c5);
+                int[,] unfinish21 = Add(c2, c4);
+                int[,] unfinish22 = Add(pp(Add(c1, c3), c2), c6);
+                /// Combines the result matrix from the sub-matrices.
+                Merge(unfinish11, finish, 0, 0);
+                Merge(unfinish12, finish, 0, nsize);
+                Merge(unfinish21, finish, nsize, 0);
+                Merge(unfinish22, finish, nsize, nsize);
+            }
+
+            return finish;
+        }
+
+        public static int[,] Add(int[,] A, int[,] B)
+        {
+            int n = A.GetLength(0);
+            int[,] finish = new int[n, n];
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    finish[i, j] = A[i, j] + B[i, j];
+                }
+            }
+
+            return finish;
+        }
+
+        public static int[,] pp(int[,] A, int[,] B)
+        {
+            int r = A.GetLength(0);
+            int[,] finish = new int[r, r];
+
+            for (int i = 0; i < r; i++)
+            {
+                for (int j = 0; j < r; j++)
+                {
+                    finish[i, j] = A[i, j] - B[i, j];
+                }
+            }
+
+            return finish;
+        }
+
+        public static void Divide(int[,] mm1, int[,] mm2, int rowss, int cStart)
+        {
+            for (int i = 0, i2 = rowss; i < mm2.GetLength(0); i++, i2++)
+            {
+                for (int j = 0, j2 = cStart; j < mm2.GetLength(1); j++, j2++)
+                {
+                    mm2[i, j] = mm1[i2, j2];
+                }
+            }
+        }
+
+        public static void Merge(int[,] mm2, int[,] mm1, int rowss, int cStart)
+        {
+            for (int i = 0, i2 = rowss; i < mm2.GetLength(0); i++, i2++)
+            {
+                for (int j = 0, j2 = cStart; j < mm2.GetLength(1); j++, j2++)
+                {
+                    mm1[i2, j2] = mm2[i, j];
+                }
+            }
+        }
+
+    }
 }

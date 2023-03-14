@@ -259,5 +259,57 @@ namespace ce100_hw1_algo_test_cs
 
             CollectionAssert.AreEqual(expected, actual);
         }
+        [TestMethod()]
+        public void StrassenMatrixTest()
+        {
+            int i, j;
+
+            int sz = 8;
+
+            Random random = new Random();
+            int[,] m1 = new int[sz, sz];
+            int[,] m2 = new int[sz, sz];
+
+
+            for (i = 1; i < sz; i++)
+            {
+                for (j = 1; j < sz; j++)
+                {
+                    m1[i, j] = random.Next(0, 10);
+                }
+
+            }
+            for (i = 1; i < sz; i++)
+            {
+                for (j = 1; j < sz; j++)
+                {
+                    m2[i, j] = random.Next(0, 10);
+                }
+            }
+
+
+            int[,] finish = StrassenMatrixMultiplication.StrassenMatrix(m1, m2);
+
+            int[,] expectedArray = new int[m1.GetLength(0), m2.GetLength(1)];
+
+            for (i = 0; i < sz; i++)
+            {
+                for (j = 0; j < sz; j++)
+                {
+                    int ss3 = 0;
+
+                    for (int k = 0; k < sz; k++)
+                    {
+                        ss3 += m1[i, k] * m2[k, j];
+                    }
+
+                    expectedArray[i, j] = ss3;
+                }
+            }
+
+            CollectionAssert.AreEqual(expectedArray, finish);
+
+
+        }
     }
 }
