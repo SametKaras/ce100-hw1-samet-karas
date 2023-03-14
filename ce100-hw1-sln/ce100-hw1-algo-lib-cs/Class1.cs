@@ -198,4 +198,79 @@ namespace ce100_hw1_algo_lib_cs
             return arr;
         }
     }
+    public class IterativeBinarySearch
+    {
+        public static int IterativeBinarySearchFunction(int[] nums, int target)
+        {
+            /// search space is nums[low…high]
+            int low = 0, high = nums.Length - 1;
+
+            /// loop till the search space is exhausted
+            while (low <= high)
+            {
+                /// find the mid-value in the search space and
+                /// compares it with the target
+
+                int mid = (low + high) / 2;    /// overflow can happen
+
+                /// target value is found
+                if (target == nums[mid])
+                {
+                    return 0;
+                }
+
+                /// if the target is less than the middle element, discard all elements
+                /// in the right search space, including the middle element
+                else if (target < nums[mid])
+                {
+                    high = mid - 1;
+                }
+
+                /// if the target is more than the middle element, discard all elements
+                /// in the left search space, including the middle element
+                else
+                {
+                    low = mid + 1;
+                }
+            }
+
+            /// target doesn't exist in the array
+            return -1;
+        }
+    }
+    public class RecursiveBinarySearch
+    {
+        public static int RecursiveBinarySearchFunction(int[] nums, int low, int high, int target)
+        {
+            /// Base condition (search space is exhausted)
+            if (low > high)
+            {
+                return -1;
+            }
+
+            /// find the mid-value in the search space and
+            /// compares it with the target
+            int mid = (low + high) / 2; /// overflow can happen
+
+            /// Base condition (target value is found)
+            if (target == nums[mid])
+            {
+                return 0;
+            }
+
+            /// discard all elements in the right search space,
+            /// including the middle element
+            else if (target < nums[mid])
+            {
+                return RecursiveBinarySearchFunction(nums, low, mid - 1, target);
+            }
+
+            /// discard all elements in the left search space,
+            /// including the middle element
+            else
+            {
+                return RecursiveBinarySearchFunction(nums, mid + 1, high, target);
+            }
+        }
+    }
 }

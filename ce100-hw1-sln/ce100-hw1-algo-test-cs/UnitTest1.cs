@@ -97,5 +97,55 @@ namespace ce100_hw1_algo_test_cs
 
             }
         }
+        [TestMethod()]
+        public void IterativeBinarySearchFunctionTest()
+        {
+            int[] ss = new int[10000];
+            Random random = new Random();
+
+            for (int i = 0; i < ss.Length; i++)
+            {
+                ss[i] = random.Next(0, 10000);
+            }
+
+            Random n2x = new Random();
+            int j = n2x.Next(1, 10000);
+
+            int sz = ss.Length;
+
+            int[] ss2 = (int[])ss.Clone();
+            Array.Sort(ss2);
+
+            int n2 = ss2[j];
+
+            int finish = IterativeBinarySearch.IterativeBinarySearchFunction(ss2, n2);
+
+            Assert.AreEqual(0, finish);
+        }
+        [TestMethod()]
+        public void RecursiveBinarySearchFunctionTest()
+        {
+            int[] ss = new int[10000];
+            Random random = new Random();
+
+            for (int i = 0; i < ss.Length; i++)
+            {
+                ss[i] = random.Next(0, 10000);
+            }
+
+            Random n1 = new Random();
+            int j = n1.Next(1, 10000);
+
+            int sz = ss.Length;
+
+            int[] ss2 = (int[])ss.Clone();
+            Array.Sort(ss2);
+
+            int n2 = ss2[j];
+
+            int finish = RecursiveBinarySearch.RecursiveBinarySearchFunction(ss2, 0, sz - 1, n2);
+
+            Assert.AreEqual(0, finish);
+        }
     }
 }
